@@ -8,6 +8,8 @@ var config = require('./configuration.json');
 var run = require('../index.js');
 var util = require('../lib/util.js');
 
+//process.env.MapboxAccessToken = 'pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw'
+process.env.MapboxAccessToken = 'pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q'
 // Ensure that access token is set locally
 if (!process.env.MapboxAccessToken) {
   throw new Error('An API access token is required to use Mapbox GL. See https://www.mapbox.com/developers/api/#access-tokens');
