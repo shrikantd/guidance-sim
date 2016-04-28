@@ -1,0 +1,80 @@
+==================================================================
+NODE js
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+sudo npm install budo -g
+sudo npm install -g envify
+	The above was installing it globally but wasnt taking effect for "guidance-sim"
+	so tried by removing -g
+
+npm install budo
+npm install envify
+npm install queue-async
+npm i guidance-geojson
+npm install mapbox-gl
+
+### Scrapped the above since did it as stated below; in the above attempt was incrementally installing the modules.
+
+PICKED this list for from package.json
+##### installed locally
+npm install budo browserify envify eslint events fs guidance-geojson guidance-replay jsonlint mapbox-gl queue-async request tape turf-distance turf-featurecollection turf-point
+
+### installed it globally - just in case
+npm install budo browserify envify eslint events fs guidance-geojson guidance-replay jsonlint mapbox-gl queue-async request tape turf-distance turf-featurecollection turf-point -g
+
+==================================================================
+How Tos - Guidance sim
+
+**** Obtain list of styles created for specific user
+curl https://api.mapbox.com/styles/v1/{username}?&access_token="xxx-access-token-key-xxx"
+
+cmd-prmt> curl "https://api.mapbox.com/styles/v1/drifttek?&access_token=pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q"
+
+
+**** Obtain specific style
+curl https://api.mapbox.com/styles/v1/{username}/{style_id}?&access_token="xxx-access-token-key-xxx"
+
+cmd-prmt> curl "https://api.mapbox.com/styles/v1/drifttek/cinjecfw10018b7mb7nqr7fiv?&access_token=pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q" > my-response.json
+
+
+**** Retrieve geo coordinates for addresses
+curl https://api.mapbox.com/geocoding/v5/{mode}/{query}?&access_token="xxx-access-token-key-xxx"
+
+curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1248%20Hampshire%20Street%20San%20Francisco%2C%20CA%2094110.json?country=us&proximity=0%2C0&types=place&autocomplete=false&access_token=pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw"
+
+3rd party website: -122.407491,37.752089
+
+response:: "center": [
+       -122.463,
+        37.7648
+      ],
+
+curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1401%20Broadway%20Street%20Redwood%20City%20CA%2094063.json?country=us&proximity=0%2C0&types=address&autocomplete=true&access_token=pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw"
+
+3rd party website: -122.2165309,37.486049
+
+response:: "center": [
+        -121.830223,
+        39.721095
+      ],
+
+
+**** Retrieve directions between two way-points and replace it on configuration + route.json
+curl https://api.mapbox.com/v4/directions/{profile}/{waypoints}?&access_token="xxx-access-token-key-xxx"
+
+Jane's route:
+cmd-prmpt>curl "https://api.mapbox.com/v4/directions/mapbox.driving/-122.407491,37.752089;-122.2165309,37.486049.json?&access_token=pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q"
+
+Sample path
+cmd-prmpt>curl "https://api.mapbox.com/v4/directions/mapbox.driving/-71.098962,42.371825;-121.830223,39.721095.json?&access_token=pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q"
+
+
+***** Pretty print json file:
+cmd-prmpt> python -m json.tool <response-filename>.json > <desired-filename>.json
+
+***** Percent en-code input param:
+cmd-prmpt> python -c "import urllib, sys; print urllib.quote(sys.argv[1])" "<input=param-to-be-percent-encoded>"
+
+***** Percent de-code input param:
+python -c "import urllib, sys; print urllib.unquote(sys.argv[1])" "<input=param-to-be-percent-decoded>"
