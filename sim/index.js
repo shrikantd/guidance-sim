@@ -8,6 +8,8 @@ var config = require('./configuration.json');
 var run = require('../index.js');
 var util = require('../lib/util.js');
 
+var directionResponse = JSON.parse(JSON.stringify(require('./route.json')));
+
 //process.env.MapboxAccessToken = 'pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw'
 process.env.MapboxAccessToken = 'pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q'
 // Ensure that access token is set locally
@@ -17,8 +19,11 @@ if (!process.env.MapboxAccessToken) {
   mapboxgl.accessToken = process.env.MapboxAccessToken;
 }
 
+config.route = directionResponse
+
 // Initiate the map using the guidance-geojson stylePrep function
 var style = JSON.parse(JSON.stringify(require('./style.json')));
+
 var map = new mapboxgl.Map({
   hash: false,
   container: 'map',
@@ -45,6 +50,7 @@ map.on('style.load', function () {
   styleRoute(mapboxgl, map, config.route);
   // Display updated simulation parameters
   res.on('update', function(data) {
+    console.log("update event")
     document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(data.pitch) + '°';
     document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(data.zoom);
     if (data.speed) { document.getElementById('step-speed').innerHTML = 'speed: ' + util.isInteger(data.speed) + ' mph'; }
