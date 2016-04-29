@@ -28,9 +28,16 @@ var map = new mapboxgl.Map({
 }).setPitch(config.pitch);
 
 // Pass default values to HTML file for display & run the simulation when the map style is loaded
-document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(config.pitch) + '°';
-document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(config.zoom);
-if (config.spacing === 'acceldecel') { document.getElementById('step-speed').innerHTML = 'speed: ' + 0 + ' mph'; }
+if (document.getElementById('step-pitch') != null)
+  document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(config.pitch) + '°';
+
+if (document.getElementById('step-zoom') != null)
+  document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(config.zoom);
+
+if (config.spacing === 'acceldecel') {
+ if (document.getElementById('step-speed') != null)
+    { document.getElementById('step-speed').innerHTML = 'speed: ' + 0 + ' mph'; }
+}
 
 map.on('style.load', function () {
   var res = run(map, config);
