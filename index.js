@@ -82,8 +82,8 @@ function simulate (map, config, version) {
         center: step.coords,
         bearing: step.bearing,
         duration: speed,
-        pitch: pitch,
-        zoom: zoom,
+        //pitch: pitch,
+        //zoom: zoom,
         easing: function (v) { return v; }
       });
       // Pass the new parameters back for display on the map

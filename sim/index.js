@@ -8,6 +8,9 @@ var config = require('./configuration.json');
 var run = require('../index.js');
 var util = require('../lib/util.js');
 
+var camAngleInc = 5;
+var zoomInc = 1;
+
 var directionResponse = JSON.parse(JSON.stringify(require('./route.json')));
 
 //process.env.MapboxAccessToken = 'pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw'
@@ -56,3 +59,47 @@ map.on('style.load', function () {
     if (data.speed) { document.getElementById('step-speed').innerHTML = 'speed: ' + util.isInteger(data.speed) + ' mph'; }
   });
 });
+
+document.getElementById("zoomin").addEventListener("click", function(){
+  console.log("Zoom " + map.getZoom());
+  
+  var zoomVal = map.getZoom() + zoomInc;
+  
+  map.easeTo({
+  zoom: zoomVal,
+  easing: function (v) { return v; }
+  });
+})
+
+document.getElementById("zoomout").addEventListener("click", function(){
+  console.log("Zoom " + map.getZoom());
+  
+  var zoomVal = map.getZoom() - zoomInc;
+  
+  map.easeTo({
+  zoom: zoomVal,
+  easing: function (v) { return v; }
+  })
+})
+
+document.getElementById("camup").addEventListener("click", function(){
+  console.log("Cam " + map.getPitch());
+  
+  var pitchVal = map.getPitch() + camAngleInc;
+
+  map.easeTo({
+  pitch: pitchVal,
+  easing: function (v) { return v; }
+  })
+})
+
+document.getElementById("camdown").addEventListener("click", function(){
+  console.log("Cam " + map.getPitch());
+  
+  var pitchVal = map.getPitch() - camAngleInc;
+  
+  map.easeTo({
+  pitch: pitchVal,
+  easing: function (v) { return v; }
+  })
+})

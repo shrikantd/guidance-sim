@@ -22,32 +22,34 @@
       left:600px;
       top:330px;
     }
-    div.myzoomin { position:relative; top: 10x; left: 1300px; }
-    div.myzoomout { position:relative; top: 50x; left: 1300px; }
-    div.myangup { position:relative; top: 90x; left: 1300px; }
-    div.myangdown { position:relative; top: 130x; left: 1300px; }
+    div.zoomin { position:relative; top: 10x; left: 1300px; }
+    div.zoomout { position:relative; top: 50x; left: 1300px; }
+    div.camup { position:relative; top: 90x; left: 1300px; }
+    div.camdown { position:relative; top: 130x; left: 1300px; }
   </style>
   <div>
+    <!--
     <div class='pin-topleft z100 pad2 fill-dark dark round' style='margin-top:10px; margin-left:10px'>
       <h6><span id='step-pitch'></span></h6>
       <h6><span id='step-zoom'></span></h6>
       <h6><span id='step-speed'></span></h6>
     </div>
+    -->
     <div id='map' style='width:1280px; height:720px;'></div>
-    <div class='myzoomin'>
-      <button type="button" onclick="func1();">Zoom In</button>
+    <div class='zoomin'>
+      <button type="button" id="zoomin">Zoom In</button>
     </div>
-    <div class='myzoomout'>
-      <button type="button">Zoom Out</button>
+    <div class='zoomout'>
+      <button type="button" id="zoomout">Zoom Out</button>
     </div>
-    <div class='myangup'>
-      <button type="button">Camera Angle Up</button>
+    <div class='camup'>
+      <button type="button" id="camup">Camera Angle Up</button>
     </div>
-    <div class='myangdown'>
-      <button type="button">Camera Angle Down</button>
+    <div class='camdown'>
+      <button type="button" id="camdown">Camera Angle Down</button>
     </div>
     <div class='car'></div>
   </div>
-  <script src='sim/bundle.js'></script>  
+  <script src='sim/bundle.js'></script> 
 </body>
 </html>
