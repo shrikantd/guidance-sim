@@ -50,12 +50,13 @@
     <div class='camdown'>
       <button type="button" id="camdown">Camera Angle Down</button>
     </div>
+    <!-- zoomSlider value and pitchSlider value shall match configuration.json zoom and pitch respectively -->
     <div class='zoomSlider'>
-      Zoom
+      <span id='zoomV'>Zoom: </span>
       <input type="range" id="zoomSlider"  min="1" max="20" step='1' value='17' />
     </div>
     <div class='pitchSlider'>
-      Pitch
+      <span id='pitchV'>Pitch: </span>
       <input type="range" id="pitchSlider"  min="0" max="60" step='5' value='30' />
     </div>
     <div class='car'></div>

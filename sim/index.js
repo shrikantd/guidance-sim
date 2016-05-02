@@ -57,6 +57,10 @@ map.on('style.load', function () {
   var res = run(map, config);
   // Add the stylized route to the map
   styleRoute(mapboxgl, map, config.route);
+
+  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(config.zoom);
+  document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(config.pitch);
+
   // Display updated simulation parameters
   res.on('update', function(data) {
     console.log("update event")
@@ -74,6 +78,8 @@ document.getElementById("zoomin").addEventListener("click", function(){
   map.zoomIn({
     easing: function(v) { return v;},
     animate: true })
+
+  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
 })
 
 document.getElementById("zoomout").addEventListener("click", function(){
@@ -82,6 +88,8 @@ document.getElementById("zoomout").addEventListener("click", function(){
   map.zoomOut({
     easing: function(v) { return v;},
     animate: true })
+
+  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
 })
 
 document.getElementById("camup").addEventListener("click", function(){
@@ -95,6 +103,7 @@ document.getElementById("camup").addEventListener("click", function(){
     })
 
     document.getElementById("pitchSlider").value = pitchVal;
+    document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
   }
 })
 
@@ -109,6 +118,7 @@ document.getElementById("camdown").addEventListener("click", function(){
     })
 
     document.getElementById("pitchSlider").value = pitchVal;
+    document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
   }
 })
 
@@ -120,6 +130,8 @@ document.getElementById("zoomSlider").addEventListener("input", function(e){
   zoom: zoomValue,
   easing: function (v) { return v; }
   })
+
+  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
 })
 
 document.getElementById("pitchSlider").addEventListener("input", function(e){
@@ -130,4 +142,6 @@ document.getElementById("pitchSlider").addEventListener("input", function(e){
   pitch: pitchVal,
   easing: function (v) { return v; }
   })
+
+  document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
 })
