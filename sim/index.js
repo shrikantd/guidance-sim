@@ -79,6 +79,7 @@ document.getElementById("zoomin").addEventListener("click", function(){
     easing: function(v) { return v;},
     animate: true })
 
+  document.getElementById("zoomSlider").value = map.getZoom();
   document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
 })
 
@@ -89,6 +90,7 @@ document.getElementById("zoomout").addEventListener("click", function(){
     easing: function(v) { return v;},
     animate: true })
 
+  document.getElementById("zoomSlider").value = map.getZoom();
   document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
 })
 
