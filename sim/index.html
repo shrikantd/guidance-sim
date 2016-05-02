@@ -26,6 +26,8 @@
     div.zoomout { position:relative; top: 50x; left: 1300px; }
     div.camup { position:relative; top: 90x; left: 1300px; }
     div.camdown { position:relative; top: 130x; left: 1300px; }
+    div.zoomSlider { position:relative; top: 160x; left: 1300px; }
+    div.pitchSlider { position:relative; top: 130x; left: 1300px; }
   </style>
   <div>
     <!--
@@ -47,6 +49,14 @@
     </div>
     <div class='camdown'>
       <button type="button" id="camdown">Camera Angle Down</button>
+    </div>
+    <div class='zoomSlider'>
+      Zoom
+      <input type="range" id="zoomSlider"  min="1" max="20" step='1' value='17' />
+    </div>
+    <div class='pitchSlider'>
+      Pitch
+      <input type="range" id="pitchSlider"  min="0" max="60" step='5' value='30' />
     </div>
     <div class='car'></div>
   </div>

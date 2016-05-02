@@ -35,6 +35,12 @@ var map = new mapboxgl.Map({
   interactive: false
 }).setPitch(config.pitch);
 
+// Enables keyboard interaction when map has focus
+// + and - gives zoom level 1
+// Shift + and Shift = is zoom level 2
+// Shift UpArrow and Shift DownArrow = change pitch by 5
+map.keyboard.enable();
+
 // Pass default values to HTML file for display & run the simulation when the map style is loaded
 if (document.getElementById('step-pitch') != null)
   document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(config.pitch) + '°';
@@ -54,8 +60,10 @@ map.on('style.load', function () {
   // Display updated simulation parameters
   res.on('update', function(data) {
     console.log("update event")
-    document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(data.pitch) + '°';
-    document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(data.zoom);
+    if (document.getElementById('step-pitch') != null)
+      document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(data.pitch) + '°';
+    if (document.getElementById('step-zoom') != null)
+      document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(data.zoom);
     if (data.speed) { document.getElementById('step-speed').innerHTML = 'speed: ' + util.isInteger(data.speed) + ' mph'; }
   });
 });
@@ -63,40 +71,60 @@ map.on('style.load', function () {
 document.getElementById("zoomin").addEventListener("click", function(){
   console.log("Zoom " + map.getZoom());
   
-  var zoomVal = map.getZoom() + zoomInc;
-  
-  map.easeTo({
-  zoom: zoomVal,
-  easing: function (v) { return v; }
-  });
+  map.zoomIn({
+    easing: function(v) { return v;},
+    animate: true })
 })
 
 document.getElementById("zoomout").addEventListener("click", function(){
   console.log("Zoom " + map.getZoom());
   
-  var zoomVal = map.getZoom() - zoomInc;
-  
-  map.easeTo({
-  zoom: zoomVal,
-  easing: function (v) { return v; }
-  })
+  map.zoomOut({
+    easing: function(v) { return v;},
+    animate: true })
 })
 
 document.getElementById("camup").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
   
   var pitchVal = map.getPitch() + camAngleInc;
+  if (pitchVal < 60) {
+    map.easeTo({
+    pitch: pitchVal,
+    easing: function (v) { return v; }
+    })
 
-  map.easeTo({
-  pitch: pitchVal,
-  easing: function (v) { return v; }
-  })
+    document.getElementById("pitchSlider").value = pitchVal;
+  }
 })
 
 document.getElementById("camdown").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
   
   var pitchVal = map.getPitch() - camAngleInc;
+  if (pitchVal > 0) {
+    map.easeTo({
+    pitch: pitchVal,
+    easing: function (v) { return v; }
+    })
+
+    document.getElementById("pitchSlider").value = pitchVal;
+  }
+})
+
+document.getElementById("zoomSlider").addEventListener("input", function(e){
+  console.log("Zoom " + map.getZoom());
+  var zoomValue = parseInt(e.target.value, 10);
+
+  map.easeTo({
+  zoom: zoomValue,
+  easing: function (v) { return v; }
+  })
+})
+
+document.getElementById("pitchSlider").addEventListener("input", function(e){
+  console.log("Cam " + map.getPitch());
+  var pitchVal = parseInt(e.target.value, 10);
   
   map.easeTo({
   pitch: pitchVal,
