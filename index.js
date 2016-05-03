@@ -74,16 +74,24 @@ function simulate (map, config, version) {
         zoom = zoomBySpeed(config, step);
       } else {
         // Calculate zoom as a function of proximity to next maneuver
-        zoom = getManeuverParams(config, version, step, maneuvers, 'zoom');
+        if (config.applyManeuvers == true)
+          zoom = getManeuverParams(config, version, step, maneuvers, 'zoom');
+        else
+          zoom = config.zoom;
       }
       // Calculate pitch as a function of proximity to next maneuver
-      var pitch = getManeuverParams(config, version, step, maneuvers, 'pitch');
+      var pitch;
+      if (config.applyManeuvers == true)
+        pitch = getManeuverParams(config, version, step, maneuvers, 'pitch');
+      else
+        pitch = config.pitch;
+
       map.easeTo({
         center: step.coords,
         bearing: step.bearing,
         duration: speed,
-        //pitch: pitch,
-        //zoom: zoom,
+        pitch: pitch,
+        zoom: zoom,
         easing: function (v) { return v; }
       });
       // Pass the new parameters back for display on the map

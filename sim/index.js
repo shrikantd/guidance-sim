@@ -1,3 +1,5 @@
+"use strict";
+
 var mapboxgl = require('mapbox-gl');
 var queue = require('queue-async');
 var request = require('request');
@@ -14,15 +16,14 @@ var zoomInc = 1;
 var directionResponse = JSON.parse(JSON.stringify(require('./route.json')));
 
 //process.env.MapboxAccessToken = 'pk.eyJ1Ijoic2hyaWthbnRkIiwiYSI6ImNpbmk1YjNjbTB3anh1a2x5ZDZrbnk2dngifQ.CazxW295AwiDbsTw_IMoSw'
-process.env.MapboxAccessToken = 'pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q'
+process.env.MapboxAccessToken = 'pk.eyJ1IjoiZHJpZnR0ZWsiLCJhIjoiY2luamN4ZWYwMHhucnVpa2pkZmh0YWt1MCJ9.7ZmolbHioS3K246D2kg84Q';
 // Ensure that access token is set locally
 if (!process.env.MapboxAccessToken) {
   throw new Error('An API access token is required to use Mapbox GL. See https://www.mapbox.com/developers/api/#access-tokens');
-} else {
-  mapboxgl.accessToken = process.env.MapboxAccessToken;
 }
+mapboxgl.accessToken = process.env.MapboxAccessToken;
 
-config.route = directionResponse
+config.route = directionResponse;
 
 // Initiate the map using the guidance-geojson stylePrep function
 var style = JSON.parse(JSON.stringify(require('./style.json')));
@@ -42,15 +43,18 @@ var map = new mapboxgl.Map({
 map.keyboard.enable();
 
 // Pass default values to HTML file for display & run the simulation when the map style is loaded
-if (document.getElementById('step-pitch') != null)
+if (document.getElementById('step-pitch') != null) {
   document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(config.pitch) + '°';
+}
 
-if (document.getElementById('step-zoom') != null)
+if (document.getElementById('step-zoom') != null) {
   document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(config.zoom);
+}
 
 if (config.spacing === 'acceldecel') {
- if (document.getElementById('step-speed') != null)
-    { document.getElementById('step-speed').innerHTML = 'speed: ' + 0 + ' mph'; }
+  if (document.getElementById('step-speed') != null) {
+    document.getElementById('step-speed').innerHTML = 'speed: ' + "0" + ' mph';
+  }
 }
 
 map.on('style.load', function () {
@@ -58,92 +62,84 @@ map.on('style.load', function () {
   // Add the stylized route to the map
   styleRoute(mapboxgl, map, config.route);
 
-  document.getElementById('zoomV').innerHTML = parseInt(config.zoom);
-  document.getElementById('pitchV').innerHTML = parseInt(config.pitch);
+  document.getElementById('zoomV').innerHTML = map.getZoom();
+  document.getElementById('pitchV').innerHTML = map.getPitch();
 
   // Display updated simulation parameters
   res.on('update', function(data) {
-    console.log("update event")
-    if (document.getElementById('step-pitch') != null)
+    console.log("update event");
+
+    if (document.getElementById('step-pitch') != null) {
       document.getElementById('step-pitch').innerHTML = 'pitch: ' + util.isInteger(data.pitch) + '°';
-    if (document.getElementById('step-zoom') != null)
+    }
+
+    if (document.getElementById('step-zoom') != null) {
       document.getElementById('step-zoom').innerHTML = 'zoom: ' + util.isInteger(data.zoom);
-    if (data.speed) { document.getElementById('step-speed').innerHTML = 'speed: ' + util.isInteger(data.speed) + ' mph'; }
+    }
+
+    if (data.speed) {
+      document.getElementById('step-speed').innerHTML = 'speed: ' + util.isInteger(data.speed) + ' mph';
+    }
   });
 });
 
 document.getElementById("zoomin").addEventListener("click", function(){
   console.log("Zoom " + map.getZoom());
-  
-  map.zoomIn({
-    easing: function(v) { return v;},
-    animate: true })
 
-  document.getElementById("zoomSlider").value = map.getZoom();
-  document.getElementById('zoomV').innerHTML = parseInt(map.getZoom());
-})
+  var zoomVal = map.getZoom() - zoomInc;
+
+  if (zoomVal >= 0) {
+    document.getElementById("zoomSlider").value = zoomVal;
+  }
+});
 
 document.getElementById("zoomout").addEventListener("click", function(){
   console.log("Zoom " + map.getZoom());
-  
-  map.zoomOut({
-    easing: function(v) { return v;},
-    animate: true })
 
-  document.getElementById("zoomSlider").value = map.getZoom();
-  document.getElementById('zoomV').innerHTML = parseInt(map.getZoom());
-})
+  var zoomVal = map.getZoom() + zoomInc;
+  
+  if (zoomVal <= 20)
+    document.getElementById("zoomSlider").value = zoomVal;
+});
 
 document.getElementById("camup").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
-  
-  var pitchVal = map.getPitch() + camAngleInc;
-  if (pitchVal <= 60) {
-    map.easeTo({
-    pitch: pitchVal,
-    easing: function (v) { return v; }
-    })
 
+  var pitchVal = map.getPitch() + camAngleInc;
+
+  if (pitchVal <= 60)
     document.getElementById("pitchSlider").value = pitchVal;
-    document.getElementById('pitchV').innerHTML = parseInt(map.pitchVal);
-  }
-})
+});
 
 document.getElementById("camdown").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
-  
-  var pitchVal = map.getPitch() - camAngleInc;
-  if (pitchVal >= 0) {
-    map.easeTo({
-    pitch: pitchVal,
-    easing: function (v) { return v; }
-    })
 
+  var pitchVal = map.getPitch() - camAngleInc;
+
+  if (pitchVal >= 0)
     document.getElementById("pitchSlider").value = pitchVal;
-    document.getElementById('pitchV').innerHTML = parseInt(pitchVal);
-  }
-})
+});
 
 document.getElementById("zoomSlider").addEventListener("input", function(e){
   console.log("Zoom " + map.getZoom());
   var zoomValue = parseInt(e.target.value, 10);
 
   map.easeTo({
-  zoom: zoomValue,
-  easing: function (v) { return v; }
+    zoom: zoomValue,
+    easing: function (v) { return v; }
   })
 
-  document.getElementById('zoomV').innerHTML = parseInt(zoomValue);
-})
+  document.getElementById('zoomV').innerHTML = util.isInteger(zoomValue);
+});
 
 document.getElementById("pitchSlider").addEventListener("input", function(e){
   console.log("Cam " + map.getPitch());
   var pitchVal = parseInt(e.target.value, 10);
-  
+
   map.easeTo({
-  pitch: pitchVal,
-  easing: function (v) { return v; }
+    pitch: pitchVal,
+    easing: function (v) { return v; }
   })
 
-  document.getElementById('pitchV').innerHTML = parseInt(pitchVal);
-})
+  document.getElementById('pitchV').innerHTML = util.isInteger(pitchVal);
+});

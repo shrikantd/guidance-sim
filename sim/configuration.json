@@ -2121,23 +2121,24 @@
     "waypoints": []
 },
   "zoom": 17,
-  "pitch": 30,
+  "pitch": 60,
   "time": "00h00m00s",
   "speed": "1.5x",
   "maneuvers": [
     {
-      "type": [ ""],
+      "type": [ "turn left"],
       "buffer": 0.1,
       "zoom": 20,
-      "speed": "1x",
-      "pitch": 45
+      "speed": "0.5x",
+      "pitch": 50
     },
     {
-      "type": [ ""],
+      "type": [ "turn right"],
       "buffer": 0.1,
       "zoom": 20,
-      "speed": "1x",
-      "pitch": 45
+      "speed": "0.5x",
+      "pitch": 50
     }
-  ]
+  ],
+  "applyManeuvers": true
 }
