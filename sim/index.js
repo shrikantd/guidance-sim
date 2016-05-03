@@ -58,8 +58,8 @@ map.on('style.load', function () {
   // Add the stylized route to the map
   styleRoute(mapboxgl, map, config.route);
 
-  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(config.zoom);
-  document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(config.pitch);
+  document.getElementById('zoomV').innerHTML = parseInt(config.zoom);
+  document.getElementById('pitchV').innerHTML = parseInt(config.pitch);
 
   // Display updated simulation parameters
   res.on('update', function(data) {
@@ -80,7 +80,7 @@ document.getElementById("zoomin").addEventListener("click", function(){
     animate: true })
 
   document.getElementById("zoomSlider").value = map.getZoom();
-  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
+  document.getElementById('zoomV').innerHTML = parseInt(map.getZoom());
 })
 
 document.getElementById("zoomout").addEventListener("click", function(){
@@ -91,21 +91,21 @@ document.getElementById("zoomout").addEventListener("click", function(){
     animate: true })
 
   document.getElementById("zoomSlider").value = map.getZoom();
-  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
+  document.getElementById('zoomV').innerHTML = parseInt(map.getZoom());
 })
 
 document.getElementById("camup").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
   
   var pitchVal = map.getPitch() + camAngleInc;
-  if (pitchVal < 60) {
+  if (pitchVal <= 60) {
     map.easeTo({
     pitch: pitchVal,
     easing: function (v) { return v; }
     })
 
     document.getElementById("pitchSlider").value = pitchVal;
-    document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
+    document.getElementById('pitchV').innerHTML = parseInt(map.pitchVal);
   }
 })
 
@@ -113,14 +113,14 @@ document.getElementById("camdown").addEventListener("click", function(){
   console.log("Cam " + map.getPitch());
   
   var pitchVal = map.getPitch() - camAngleInc;
-  if (pitchVal > 0) {
+  if (pitchVal >= 0) {
     map.easeTo({
     pitch: pitchVal,
     easing: function (v) { return v; }
     })
 
     document.getElementById("pitchSlider").value = pitchVal;
-    document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
+    document.getElementById('pitchV').innerHTML = parseInt(pitchVal);
   }
 })
 
@@ -133,7 +133,7 @@ document.getElementById("zoomSlider").addEventListener("input", function(e){
   easing: function (v) { return v; }
   })
 
-  document.getElementById('zoomV').innerHTML = 'Zoom: ' + util.isInteger(map.getZoom());
+  document.getElementById('zoomV').innerHTML = parseInt(zoomValue);
 })
 
 document.getElementById("pitchSlider").addEventListener("input", function(e){
@@ -145,5 +145,5 @@ document.getElementById("pitchSlider").addEventListener("input", function(e){
   easing: function (v) { return v; }
   })
 
-  document.getElementById('pitchV').innerHTML = 'Pitch: ' + util.isInteger(map.getPitch());
+  document.getElementById('pitchV').innerHTML = parseInt(pitchVal);
 })
