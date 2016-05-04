@@ -25,6 +25,14 @@ mapboxgl.accessToken = process.env.MapboxAccessToken;
 
 config.route = directionResponse;
 
+// Set the initial slider values
+if (document.getElementById('zoomSlider') != null) {
+  document.getElementById("zoomSlider").value = util.isInteger(config.zoom);
+}
+if (document.getElementById('pitchSlider') != null) {
+  document.getElementById("pitchSlider").value = util.isInteger(config.pitch);
+}
+
 // Initiate the map using the guidance-geojson stylePrep function
 var style = JSON.parse(JSON.stringify(require('./style.json')));
 
@@ -84,62 +92,50 @@ map.on('style.load', function () {
 });
 
 document.getElementById("zoomin").addEventListener("click", function(){
-  console.log("Zoom " + map.getZoom());
-
-  var zoomVal = map.getZoom() - zoomInc;
-
-  if (zoomVal >= 0) {
-    document.getElementById("zoomSlider").value = zoomVal;
-  }
+  setMapZoom(map.getZoom() + zoomInc);
 });
 
 document.getElementById("zoomout").addEventListener("click", function(){
-  console.log("Zoom " + map.getZoom());
-
-  var zoomVal = map.getZoom() + zoomInc;
-  
-  if (zoomVal <= 20)
-    document.getElementById("zoomSlider").value = zoomVal;
+  setMapZoom(map.getZoom() - zoomInc);
 });
 
 document.getElementById("camup").addEventListener("click", function(){
-  console.log("Cam " + map.getPitch());
-
-  var pitchVal = map.getPitch() + camAngleInc;
-
-  if (pitchVal <= 60)
-    document.getElementById("pitchSlider").value = pitchVal;
+  setMapPitch(map.getPitch() + camAngleInc);
 });
 
 document.getElementById("camdown").addEventListener("click", function(){
-  console.log("Cam " + map.getPitch());
-
-  var pitchVal = map.getPitch() - camAngleInc;
-
-  if (pitchVal >= 0)
-    document.getElementById("pitchSlider").value = pitchVal;
+  setMapPitch(map.getPitch() - camAngleInc);
 });
 
 document.getElementById("zoomSlider").addEventListener("input", function(e){
-  console.log("Zoom " + map.getZoom());
   var zoomValue = parseInt(e.target.value, 10);
 
-  map.easeTo({
-    zoom: zoomValue,
-    easing: function (v) { return v; }
-  })
-
-  document.getElementById('zoomV').innerHTML = util.isInteger(zoomValue);
+  setMapZoom(zoomValue);
 });
 
 document.getElementById("pitchSlider").addEventListener("input", function(e){
-  console.log("Cam " + map.getPitch());
   var pitchVal = parseInt(e.target.value, 10);
 
-  map.easeTo({
-    pitch: pitchVal,
-    easing: function (v) { return v; }
-  })
-
-  document.getElementById('pitchV').innerHTML = util.isInteger(pitchVal);
+  setMapPitch(pitchVal);
 });
+
+function setMapZoom(val) {
+  if (( val >= 0 ) && ( val <= 20)) {
+    console.log("Zoom " + val);
+    config.zoom = val;
+
+    document.getElementById('zoomV').innerHTML = util.isInteger(val);
+    document.getElementById('zoomSlider').value = val;
+  }
+}
+
+function setMapPitch(val) {
+  if (( val >= 30 ) && ( val <= 60)) {
+    console.log("Pitch " + val);
+
+    config.pitch = val;
+
+    document.getElementById('pitchV').innerHTML = util.isInteger(val);
+    document.getElementById('pitchSlider').value = val;
+  }
+}
