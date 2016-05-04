@@ -18,16 +18,18 @@
       width:100%;
       height:100%;
       background:url('./CarAva.png') no-repeat;
-      position:absolute;
-      left:600px;
-      top:330px;
+      position:fixed;
+      left: 50%;
+      top: 50%;
+      margin-top: -41px;
+      margin-left: -50px;
     }
-    div.zoomin { position:relative; top: 10x; left: 1300px; }
-    div.zoomout { position:relative; top: 50x; left: 1300px; }
-    div.camup { position:relative; top: 90x; left: 1300px; }
-    div.camdown { position:relative; top: 130x; left: 1300px; }
-    div.zoomSlider { position:relative; top: 160x; left: 1300px; }
-    div.pitchSlider { position:relative; top: 130x; left: 1300px; }
+    div.zoomin { position:relative; top: 10x; left: 95%; }
+    div.zoomout { position:relative; top: 50x; left: 95%; }
+    div.camup { position:relative; top: 90x; left: 92%; }
+    div.camdown { position:relative; top: 130x; left: 91%; }
+    div.zoomSlider { position:relative; top: 160x; left: 85%; }
+    div.pitchSlider { position:relative; top: 130x; left: 85%; }
   </style>
   <div>
     <!--
@@ -37,7 +39,7 @@
       <h6><span id='step-speed'></span></h6>
     </div>
     -->
-    <div id='map' style='width:1280px; height:720px;'></div>
+    <div id='map' style='width:100%; height:100%;'></div>
     <div class='zoomin'>
       <button type="button" id="zoomin">Zoom In</button>
     </div>
